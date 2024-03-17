@@ -1,3 +1,3 @@
-docker run -p 3306:3306 --name some-mariadb -e MARIADB_ROOT_PASSWORD=my-secret-pw -d mariadb:latest
+docker run -p 3306:3306 --name mariadb1 -e MARIADB_ROOT_PASSWORD=pass -d mariadb:latest
 
-schema name = "transaction-service"
+prozatím 3 různé schéma ve stejné databázi | schema name = "transaction-service" "deposit-service" "authentication-service"
