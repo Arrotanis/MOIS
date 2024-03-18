@@ -1,6 +1,6 @@
 Spuštení databáze:
 
-Spustit CMD jako správce ->
+Spustit Docker Desktop -> Spustit CMD jako správce ->
 
 docker run -p 3306:3306 --name mariadb1 -e MARIADB_ROOT_PASSWORD=pass -d mariadb:latest
 
