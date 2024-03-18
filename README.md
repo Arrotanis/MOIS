@@ -11,12 +11,21 @@ prozatím 3 různé schéma ve stejné databázi | schema name = "transaction-se
 TODO:
 
 dokončit základní funkcionality služeb
+
 propojit služby mezi sebou
+
 vytvořit API gateway
+
 vytvořit front-end
+
 implementovat pokročilé funkcionality
+
 propojit transaction-service s paypalem
+
 propojit authentization-service s facebookem
+
 zabezpečení
+
 rozdělení databází pro každou službu
+
 dockerizace
