@@ -17,9 +17,13 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private int balance;
     @OneToMany(mappedBy = "sourceAccount")
     private List<Transaction> sourceTransactions;
 
     @OneToMany(mappedBy = "targetAccount")
     private List<Transaction> targetTransactions;
+
+    private Long ownerProfileId;
 }

@@ -17,7 +17,7 @@ public class TransactionController {
     public String createTransactionAndAddToAccounts(@RequestBody TransactionDto transactionDto,
                                                     @RequestParam Long sourceAccountId,
                                                     @RequestParam Long targetAccountId) {
-        transactionService.createTransactionAndAddToAccounts(transactionDto, sourceAccountId, targetAccountId);
+        transactionService.createTransaction(transactionDto, sourceAccountId, targetAccountId);
         return "Transaction Created and Added to Accounts Successfully";
     }
 }

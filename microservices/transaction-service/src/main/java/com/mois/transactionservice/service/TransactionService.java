@@ -18,14 +18,12 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
 
-    public void createTransactionAndAddToAccounts(TransactionDto transactionDto, Long sourceAccountId, Long targetAccountId) {
-        // Create a new transaction object
+    public void createTransaction(TransactionDto transactionDto, Long sourceAccountId, Long targetAccountId) {
         Transaction transaction = new Transaction();
         transaction.setTransactionNumber(UUID.randomUUID().toString());
         transaction.setDescription(transactionDto.getDescription());
         transaction.setTransactionAmount(transactionDto.getTransactionAmount());
 
-        // Retrieve the source and target accounts
         Optional<Account> optionalSourceAccount = accountRepository.findById(sourceAccountId);
         Optional<Account> optionalTargetAccount = accountRepository.findById(targetAccountId);
 
@@ -33,11 +31,12 @@ public class TransactionService {
             Account sourceAccount = optionalSourceAccount.get();
             Account targetAccount = optionalTargetAccount.get();
 
-            // Add the transaction to both accounts
             transaction.setSourceAccount(sourceAccount);
             transaction.setTargetAccount(targetAccount);
             sourceAccount.getSourceTransactions().add(transaction);
             targetAccount.getTargetTransactions().add(transaction);
+            sourceAccount.setBalance(sourceAccount.getBalance()-transaction.getTransactionAmount());
+            targetAccount.setBalance(targetAccount.getBalance()+transaction.getTransactionAmount());
 
             // Save the transaction
             transactionRepository.save(transaction);
