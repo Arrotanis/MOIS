@@ -18,6 +18,7 @@ public class Deposit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private int depositedBalance;
     private Long linkedAccountId;
 
     private Long ownerProfileId;

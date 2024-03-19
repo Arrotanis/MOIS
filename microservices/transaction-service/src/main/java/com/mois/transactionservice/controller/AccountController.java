@@ -1,6 +1,5 @@
 package com.mois.transactionservice.controller;
 
-import com.mois.transactionservice.dto.AccountRequest;
 import com.mois.transactionservice.service.AccountService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +13,10 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    @PostMapping
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public String createAccount(){
-        accountService.createAccount();
+    public String createAccount(@RequestParam Long ownerAccountId){
+        accountService.createAccount(ownerAccountId);
         return "Account Created Successfully";
     }
 
@@ -28,5 +27,14 @@ public class AccountController {
                                       @RequestParam int amountToAdd) {
         accountService.addBalance(accountId, amountToAdd);
         return "Balance added to account successfully";
+    }
+
+    @PostMapping("/deposit-transfer")
+    @ResponseStatus(HttpStatus.OK)
+    @Transactional
+    public String transferToDeposit(@RequestParam Long accountId,
+                                      @RequestParam int amountToTransfer) {
+        accountService.transferToDeposit(accountId, amountToTransfer);
+        return "Balance transferred to deposit successfully";
     }
 }

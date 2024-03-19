@@ -6,53 +6,166 @@
 	},
 	"item": [
 		{
-			"name": "New Account",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "localhost:8081/api/account",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"api",
-						"account"
-					]
+			"name": "transaction-service",
+			"item": [
+				{
+					"name": "Create Transaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"Payment for services\",\r\n    \"transactionAmount\": 100,\r\n    \"sourceAccountId\": 1,\r\n    \"targetAccountId\": 2\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/transactions/create?sourceAccountId=3&targetAccountId=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"transactions",
+								"create"
+							],
+							"query": [
+								{
+									"key": "sourceAccountId",
+									"value": "3"
+								},
+								{
+									"key": "targetAccountId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Account",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/api/account",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Balance",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/api/account/add-balance?accountId=1&amountToAdd=500",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"account",
+								"add-balance"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "1"
+								},
+								{
+									"key": "amountToAdd",
+									"value": "500"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deposit Transfer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/api/account/add-balance?accountId=1&amountToAdd=500",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"account",
+								"add-balance"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "1"
+								},
+								{
+									"key": "amountToAdd",
+									"value": "500"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "New Transaction",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"transactionNumber\": \"TX123456\",\r\n    \"description\": \"Payment for services\",\r\n    \"transactionAmount\": 100\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "deposit-service",
+			"item": [
+				{
+					"name": "Create Deposit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/api/account/add-balance?accountId=1&amountToAdd=500",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"account",
+								"add-balance"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "1"
+								},
+								{
+									"key": "amountToAdd",
+									"value": "500"
+								}
+							]
 						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8081/api/transactions/create/1",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"api",
-						"transactions",
-						"create",
-						"1"
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "authentication-service",
+			"item": []
 		}
 	]
 }
