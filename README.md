@@ -6,15 +6,17 @@ docker run -p 3306:3306 --name mariadb1 -e MARIADB_ROOT_PASSWORD=pass -d mariadb
 
 -> v InteliJ přidat MariaDB, username root, password pass, port 3306 -> vytvořit potřebné schéma v databázi
 
-prozatím 3 různé schéma ve stejné databázi | schema name = "transaction-service", "deposit-service", "authentication-service"
+-> prozatím 3 různé schéma ve stejné databázi | schema name = "transaction-service", "deposit-service", "authentication-service"
 
-
+----------------------
 
 TODO:
 
 dokončit základní funkcionality služeb
 
 propojit služby mezi sebou
+
+vytvořit discovery service
 
 vytvořit API gateway
 
@@ -31,3 +33,7 @@ zabezpečení
 rozdělení databází pro každou službu
 
 dockerizace
+
+----------------------
+
+Lukášův projekt na PPRO: https://github.com/vanalu1/PPRO_InternetBanking
