@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 public class DepositService {
     private final DepositRepository depositRepository;
 
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     public void createDeposit(Long linkedAccountId, Long ownerProfileId, int depositedBalance) {
         Deposit deposit = new Deposit();
@@ -22,11 +22,10 @@ public class DepositService {
         deposit.setDepositedBalance(depositedBalance);
         depositRepository.save(deposit);
 
-        Mono<String> responseMono = webClient.post()
+        Mono<String> responseMono = webClientBuilder.build().post()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("http")
-                        .host("localhost")
-                        .port(8081)
+                        .host("transaction-service")
                         .path("/api/account/deposit-transfer")
                         .queryParam("accountId", linkedAccountId)
                         .queryParam("amountToTransfer", depositedBalance)
