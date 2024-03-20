@@ -23,24 +23,24 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/api/transactions/create?sourceAccountId=3&targetAccountId=1",
+							"raw": "localhost:8081/api/transaction/create-transaction?sourceAccountId=4&targetAccountId=2",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"api",
-								"transactions",
-								"create"
+								"transaction",
+								"create-transaction"
 							],
 							"query": [
 								{
 									"key": "sourceAccountId",
-									"value": "3"
+									"value": "4"
 								},
 								{
 									"key": "targetAccountId",
-									"value": "1"
+									"value": "2"
 								}
 							]
 						}
@@ -53,14 +53,21 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/api/account",
+							"raw": "localhost:8081/api/transaction/create-account?ownerAccountId=1",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"api",
-								"account"
+								"transaction",
+								"create-account"
+							],
+							"query": [
+								{
+									"key": "ownerAccountId",
+									"value": "1"
+								}
 							]
 						}
 					},
@@ -72,14 +79,14 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/api/account/add-balance?accountId=1&amountToAdd=500",
+							"raw": "localhost:8081/api/transaction/add-balance?accountId=1&amountToAdd=500",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"api",
-								"account",
+								"transaction",
 								"add-balance"
 							],
 							"query": [
@@ -102,14 +109,86 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/api/account/add-balance?accountId=1&amountToAdd=500",
+							"raw": "localhost:8081/api/transaction/deposit-transfer?accountId=1&amountToTransfer=125",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"api",
-								"account",
+								"transaction",
+								"deposit-transfer"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "1"
+								},
+								{
+									"key": "amountToTransfer",
+									"value": "125"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accounts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/api/transaction/accounts/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"transaction",
+								"accounts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accounts Gateway",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/transaction/accounts/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"transaction",
+								"accounts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Balance Gateway",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/transaction/add-balance?accountId=1&amountToAdd=500",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"transaction",
 								"add-balance"
 							],
 							"query": [
@@ -137,24 +216,28 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/api/account/add-balance?accountId=1&amountToAdd=500",
+							"raw": "localhost:8082/api/deposit/create?linkedAccountId=1&ownerProfileId=1&depositedBalance=333",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8082",
 							"path": [
 								"api",
-								"account",
-								"add-balance"
+								"deposit",
+								"create"
 							],
 							"query": [
 								{
-									"key": "accountId",
+									"key": "linkedAccountId",
 									"value": "1"
 								},
 								{
-									"key": "amountToAdd",
-									"value": "500"
+									"key": "ownerProfileId",
+									"value": "1"
+								},
+								{
+									"key": "depositedBalance",
+									"value": "333"
 								}
 							]
 						}
