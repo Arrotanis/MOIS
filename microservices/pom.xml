@@ -19,6 +19,7 @@
         <module>transaction-service</module>
         <module>deposit-service</module>
         <module>authentication-service</module>
+        <module>api-gateway</module>
     </modules>
 
     <properties>
