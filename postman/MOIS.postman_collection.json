@@ -243,6 +243,40 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Create Deposit Gateway",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8082/api/deposit/create?linkedAccountId=1&ownerProfileId=1&depositedBalance=333",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"deposit",
+								"create"
+							],
+							"query": [
+								{
+									"key": "linkedAccountId",
+									"value": "1"
+								},
+								{
+									"key": "ownerProfileId",
+									"value": "1"
+								},
+								{
+									"key": "depositedBalance",
+									"value": "333"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
