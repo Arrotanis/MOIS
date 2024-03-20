@@ -1,3 +1,6 @@
+Autoři: František Bílek, Petr Pokorný, Jindřich Svoboda, Lukáš Váňa
+
+----------------------
 Spuštení databáze:
 
 Spustit Docker Desktop -> Spustit CMD jako správce ->
@@ -12,13 +15,9 @@ docker run -p 3306:3306 --name mariadb1 -e MARIADB_ROOT_PASSWORD=pass -d mariadb
 
 TODO:
 
-dokončit základní funkcionality služeb
+dokončit základní funkcionality služeb (metody v controllerech atd.)
 
-propojit služby mezi sebou
-
-vytvořit discovery service
-
-vytvořit API gateway
+propojit služby mezi sebou (pomocí webClientBuilder, příklad v DepositService)
 
 vytvořit front-end
 
@@ -32,8 +31,12 @@ zabezpečení
 
 rozdělení databází pro každou službu
 
-dockerizace
+dockerizace služeb
 
 ----------------------
 
 Lukášův projekt na PPRO: https://github.com/vanalu1/PPRO_InternetBanking
+
+Eureka Dashboard: http://localhost:8080/eureka/web | http://localhost:8761/
+
+Random YT guide: https://www.youtube.com/playlist?list=PLSVW22jAG8pBnhAdq9S8BpLnZ0_jVBj0c
