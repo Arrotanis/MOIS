@@ -1,5 +1,6 @@
 package com.mois.transactionservice.service;
 
+import com.mois.transactionservice.dto.CreateAccountRequest;
 import com.mois.transactionservice.dto.TransactionDto;
 import com.mois.transactionservice.model.Account;
 import com.mois.transactionservice.model.Transaction;
@@ -56,9 +57,9 @@ public class TransactionService {
     private final WebClient.Builder webClientBuilder;
 
 
-    public void createAccount(Long ownerProfileId) {
+    public void createAccount(CreateAccountRequest request) {
         Account account = new Account();
-        account.setOwnerProfileId(ownerProfileId);
+        account.setOwnerProfileId(request.getOwnerAccountId());
         accountRepository.save(account);
     }
 

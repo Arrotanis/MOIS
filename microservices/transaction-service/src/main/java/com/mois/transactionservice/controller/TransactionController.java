@@ -1,5 +1,6 @@
 package com.mois.transactionservice.controller;
 
+import com.mois.transactionservice.dto.CreateAccountRequest;
 import com.mois.transactionservice.dto.TransactionDto;
 import com.mois.transactionservice.model.Account;
 import com.mois.transactionservice.service.TransactionService;
@@ -27,8 +28,8 @@ public class TransactionController {
 
     @PostMapping("/create-account")
     @ResponseStatus(HttpStatus.CREATED)
-    public String createAccount(@RequestParam Long ownerAccountId){
-        transactionService.createAccount(ownerAccountId);
+    public String createAccount(@RequestBody CreateAccountRequest request){
+        transactionService.createAccount(request);
         return "Account Created Successfully";
     }
 

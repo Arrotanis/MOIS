@@ -5,12 +5,12 @@ function CreateAccountForm() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const response = await fetch('http://localhost:8080/create-account', {
+        const response = await fetch('http://localhost:8080/api/transaction/create-account', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json', // Correctly indicates that the body is JSON
             },
-            body: `ownerAccountId=${ownerAccountId}`
+            body: JSON.stringify({ ownerAccountId: ownerAccountId }) // Correctly format the body as JSON
         });
 
         if (response.ok) {
