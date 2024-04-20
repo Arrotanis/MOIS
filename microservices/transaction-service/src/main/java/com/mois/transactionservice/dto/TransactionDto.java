@@ -14,6 +14,6 @@ public class TransactionDto {
     private String transactionNumber;
     private String description;
     private int transactionAmount;
-
-    private Account targetAccount;
+    private Long targetAccount;
+    private Long sourceAccount;
 }

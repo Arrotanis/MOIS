@@ -1,6 +1,6 @@
 package com.mois.transactionservice.dto;
 
-public class CreateAccountRequest {
+public class CreateAccountRequestDto {
     private Long ownerAccountId;
 
     // Standard getters and setters

@@ -1,5 +1,6 @@
 package com.mois.depositservice.controller;
 
+import com.mois.depositservice.dto.CreateDepositDto;
 import com.mois.depositservice.service.DepositService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,8 +14,8 @@ public class DepositController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public String createAccount(@RequestParam Long linkedAccountId, @RequestParam Long ownerProfileId, @RequestParam int depositedBalance){
-        depositService.createDeposit(linkedAccountId, ownerProfileId, depositedBalance);
+    public String createAccount(@RequestBody CreateDepositDto createDepositDto){
+        depositService.createDeposit(createDepositDto);
         return "Deposit Created Successfully";
     }
 }

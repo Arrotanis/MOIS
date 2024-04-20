@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name="t_deposits")
 @Getter
@@ -26,6 +28,8 @@ public class Deposit {
     private float interestRate;
 
     //startDate
+    private LocalDateTime startDate;
 
     //endDate
+    private LocalDateTime endDate;
 }
