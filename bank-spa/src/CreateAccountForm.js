@@ -35,5 +35,4 @@ function CreateAccountForm() {
         </form>
     );
 }
-
 export default CreateAccountForm;

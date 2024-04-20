@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import CreateAccountForm from "./CreateAccountForm";
+import MyButton from "./MyButton";
 
 function App() {
   return (
@@ -8,8 +9,10 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <h1>Create Account</h1>
+        <MyButton />
         <CreateAccountForm />
         <p>
+
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <a
