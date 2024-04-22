@@ -26,14 +26,6 @@ public class TransactionController {
         return "Transaction Created and Added to Accounts Successfully";
     }
 
-    /*@PostMapping("/create-transaction")
-    @ResponseStatus(HttpStatus.CREATED)
-    public String createTransactionAndAddToAccounts(@RequestBody TransactionDto transactionDto,
-                                                    @RequestParam Long sourceAccountId,
-                                                    @RequestParam Long targetAccountId) {
-        transactionService.createTransaction(transactionDto, sourceAccountId, targetAccountId);
-        return "Transaction Created and Added to Accounts Successfully";
-    }*/
 
     @PostMapping("/create-account")
     @ResponseStatus(HttpStatus.CREATED)
@@ -46,15 +38,10 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.OK)
     @Transactional
     public String addBalanceToAccount(@RequestBody AddBalanceDto addBalanceDto) {
+        System.out.println("Z controleru acc id: "+addBalanceDto.getTargetAccountId());
         transactionService.addBalance(addBalanceDto);
         return "Balance added to account successfully";
     }
-
-    /*public String addBalanceToAccount(@RequestParam Long accountId,
-                                      @RequestParam int amountToAdd) {
-        transactionService.addBalance(accountId, amountToAdd);
-        return "Balance added to account successfully";
-    }*/
 
     @PostMapping("/deposit-transfer")
     @ResponseStatus(HttpStatus.OK)
@@ -66,7 +53,9 @@ public class TransactionController {
 
     @GetMapping("/accounts/{ownerProfileId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Account> getAccountsByOwnerProfileId(@PathVariable Long ownerProfileId) {
+    public List<Account> getAccountsByOwnerProfileIds(@PathVariable Long ownerProfileId) {
         return transactionService.getAccountsByOwnerProfileId(ownerProfileId);
     }
+
+
 }

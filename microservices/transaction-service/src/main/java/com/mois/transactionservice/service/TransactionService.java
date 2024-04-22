@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -73,6 +74,8 @@ public class TransactionService {
 
     @Transactional
     public void addBalance(AddBalanceDto addBalanceDto) {
+        System.out.println("Davan add lanace na ucet !!!");
+        System.out.println("Na acc: "+ addBalanceDto.getTargetAccountId()+", tolik balance:"+addBalanceDto.getAddBalanceAmount());
         Optional<Account> optionalAccount = accountRepository.findById(addBalanceDto.getTargetAccountId());
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();
@@ -115,7 +118,16 @@ public class TransactionService {
         }
     }
     public List<Account> getAccountsByOwnerProfileId(Long ownerProfileId) {
-        return accountRepository.findByOwnerProfileId(ownerProfileId);
+        List<Account> akounty;
+        akounty = accountRepository.findByOwnerProfileId(ownerProfileId);
+        int kolik = akounty.size();
+        System.out.println("Pocet elementu v listu je : "+kolik);
+        for (Account element: akounty) {
+            System.out.println("Id accountu: "+element.getId());
+            System.out.println("Balance accountu: "+element.getBalance());
+        }
+        return akounty;
+        //return accountRepository.findByOwnerProfileId(ownerProfileId);
     }
 
     //getTransactionHistory
