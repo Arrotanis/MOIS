@@ -134,6 +134,7 @@ import { TextField, Button, CircularProgress, Typography } from '@mui/material';
         </>
     );
 };*/
+/*
 const Accounts = () => {
     const [accountData, setAccountData] = useState(null);
     const [accountId, setAccountId] = useState('');
@@ -236,3 +237,4 @@ const Accounts = () => {
 };
 
 export default Accounts;
+*/

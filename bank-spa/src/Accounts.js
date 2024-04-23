@@ -1,5 +1,9 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import {DatePicker} from "@mui/x-date-pickers";
+import {LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from 'dayjs';
 import {
     TextField,
     Button,
@@ -14,17 +18,19 @@ import {
     DialogActions
 } from '@mui/material';
 
+let date = Date()
 const Accounts = ({loggedIn, onLogin}) => {
     const [accountData, setAccountData] = useState(null);
-    const [profileId, setProfileId] = useState('');
+    const [accountId, setAccountId] = useState('');
     const [loading, setLoading] = useState(false);
     const [balanceAmounts, setBalanceAmounts] = useState({});
-    const [selectedAccount, setSelectedAccount] = useState(null);
+    const [selectedAccountId, setSelectedAccountId] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
+    const [termDate, setTermDate] = React.useState(dayjs(date))
 
     const sendLoginRequest = () => {
         setLoading(true);
-        axios.get('http://localhost:8080/api/transaction/accounts/' + profileId)
+        axios.get('http://localhost:8080/api/transaction/accounts/' + accountId)
             .then(response => {
                 setAccountData(response.data);
                 setLoading(false);
@@ -37,7 +43,7 @@ const Accounts = ({loggedIn, onLogin}) => {
     };
 
     const handleAccountClick = (account) => {
-        setSelectedAccount(account);
+        setSelectedAccountId(account);
         setOpenDialog(true);
     };
 
@@ -48,8 +54,8 @@ const Accounts = ({loggedIn, onLogin}) => {
     const handleAddBalance = () => {
         setLoading(true);
         axios.post('http://localhost:8080/api/transaction/add-balance', {
-            targetAccountId: selectedAccount?.id,
-            addBalanceAmount: balanceAmounts[selectedAccount?.id]
+            targetAccountId: selectedAccountId?.id,
+            addBalanceAmount: balanceAmounts[selectedAccountId?.id]
         })
             .then(response => {
                 console.log('Balance added successfully:', response.data);
@@ -59,6 +65,21 @@ const Accounts = ({loggedIn, onLogin}) => {
             .catch(error => {
                 console.error('Error adding balance:', error);
                 setLoading(false);
+            });
+    };
+
+    const handleAddTerm = () => {
+        setLoading(true);
+        console.log('Selected date:', termDate.format('YYYY-MM-DD'));
+        axios.post('http://localhost:8080/api/deposit/create', {
+            date: termDate.format('YYYY-MM-DD')
+
+        })
+            .then(response => {
+                console.log('Deposit created successfully:', response.data);
+            })
+            .catch(error => {
+                console.error('Error creating deposit:', error);
             });
     };
 
@@ -76,8 +97,8 @@ const Accounts = ({loggedIn, onLogin}) => {
                     <TextField
                         id="account"
                         label="Login (ID)"
-                        value={profileId}
-                        onChange={(e) => setProfileId(e.target.value)}
+                        value={accountId}
+                        onChange={(e) => setAccountId(e.target.value)}
                         fullWidth
                         variant="outlined"
                     />
@@ -97,29 +118,35 @@ const Accounts = ({loggedIn, onLogin}) => {
                     <Typography variant="h6">Accounts</Typography>
                     <List>
                         {accountData.map(account => (
-                            <ListItem key={account?.id} button onClick={() => handleAccountClick(account)}>
-                                <ListItemText primary={`Account number: ${account?.id}`}/>
-                                <ListItemText primary={`Balance: ${account?.balance}`}/>
+                            <ListItem key={account.id} button onClick={() => handleAccountClick(account)}>
+                                <ListItemText primary={`Account number: ${account.id}`}/>
+                                <ListItemText primary={`Balance: ${account.balance}`}/>
                             </ListItem>
                         ))}
                     </List>
                     <Dialog open={openDialog} onClose={handleCloseDialog}>
                         <DialogTitle>Account Details</DialogTitle>
                         <DialogContent>
-                            <Typography variant="subtitle1">Account number: {selectedAccount?.id}</Typography>
-                            <Typography variant="subtitle1">Balance: {selectedAccount?.balance}</Typography>
+                            <Typography variant="subtitle1">Account number: {selectedAccountId?.id}</Typography>
+                            <Typography variant="subtitle1">Balance: {selectedAccountId?.balance}</Typography>
                             <TextField
                                 type="number"
-                                label="Add Balance Amount"
-                                value={balanceAmounts[selectedAccount?.id] || ''}
-                                onChange={(e) => handleBalanceChange(selectedAccount?.id, e.target.value)}
+                                label="Amount"
+                                value={balanceAmounts[selectedAccountId?.id] || ''}
+                                onChange={(e) => handleBalanceChange(selectedAccountId?.id, e.target.value)}
                                 fullWidth
                                 variant="outlined"
                                 sx={{marginBottom: '1rem'}}
                             />
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    value={termDate}
+                                    onChange={(newValue) => setTermDate(newValue)}
+                                />
+                            </LocalizationProvider>
                             <Typography variant="subtitle1">Transaction History:</Typography>
                             <List>
-                                {selectedAccount?.sourceTransactions?.map(transaction => (
+                                {selectedAccountId?.sourceTransactions.map(transaction => (
                                     <ListItem key={transaction.id} sx={{
                                         backgroundColor: 'rgba(255, 0, 0, 0.1)',
                                         display: 'flex',
@@ -130,7 +157,7 @@ const Accounts = ({loggedIn, onLogin}) => {
                                         <ListItemText primary={`Description: ${transaction.description}`}/>
                                     </ListItem>
                                 ))}
-                                {selectedAccount?.targetTransactions?.map(transaction => (
+                                {selectedAccountId?.targetTransactions.map(transaction => (
                                     <ListItem key={transaction.id} sx={{
                                         backgroundColor: 'rgba(0, 255, 0, 0.1)',
                                         display: 'flex',
@@ -147,7 +174,8 @@ const Accounts = ({loggedIn, onLogin}) => {
                             </List>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleAddBalance} color="primary">Add Balance</Button>
+                            <Button onClick={handleAddTerm} color="primary">Add term deposit</Button>
+                            <Button onClick={handleAddBalance} color="primary">Add balance</Button>
                             <Button onClick={handleCloseDialog} color="primary">Close</Button>
                         </DialogActions>
                     </Dialog>
