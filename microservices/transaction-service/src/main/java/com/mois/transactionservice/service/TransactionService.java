@@ -130,5 +130,10 @@ public class TransactionService {
         //return accountRepository.findByOwnerProfileId(ownerProfileId);
     }
 
+    public List<Transaction> getTransactionHistory(Long accountId1){
+        Optional<Account> optionalAccount = accountRepository.findById(accountId1);
+        Account tempAccount = optionalAccount.get();
+        return transactionRepository.findBySourceAccount(tempAccount);
+    }
     //getTransactionHistory
 }

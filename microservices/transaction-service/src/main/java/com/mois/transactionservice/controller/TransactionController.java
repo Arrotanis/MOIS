@@ -5,6 +5,7 @@ import com.mois.transactionservice.dto.CreateAccountRequestDto;
 import com.mois.transactionservice.dto.TransactionDto;
 import com.mois.transactionservice.dto.TransferToDepositDto;
 import com.mois.transactionservice.model.Account;
+import com.mois.transactionservice.model.Transaction;
 import com.mois.transactionservice.service.TransactionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -57,5 +58,10 @@ public class TransactionController {
         return transactionService.getAccountsByOwnerProfileId(ownerProfileId);
     }
 
+    @GetMapping("/transactions/{accountId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Transaction> getTransactionsByAccount(@PathVariable Long accountId){
+        return transactionService.getTransactionHistory(accountId);
+    }
 
 }
