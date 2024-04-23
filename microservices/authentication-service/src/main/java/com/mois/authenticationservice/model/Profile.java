@@ -10,7 +10,6 @@ import lombok.Setter;
 @Table(name = "profiles")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class Profile {
     @Id
@@ -26,7 +25,7 @@ public class Profile {
     @Column(unique = true)
     private String facebookId;
 
-
-
-
+    // Default constructor
+    public Profile() {
+    }
 }
