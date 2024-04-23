@@ -125,7 +125,7 @@ const Accounts = ({loggedIn, onLogin}) => {
                                         display: 'flex',
                                         gap: '10px'
                                     }}>
-                                        <ListItemText primary={`To account: ${transaction.targetAccount.id}`}/>
+                                        <ListItemText primary={`To account: ${transaction.targetAccount?.id}`}/>
                                         <ListItemText primary={`Amount: ${transaction.transactionAmount}`}/>
                                         <ListItemText primary={`Description: ${transaction.description}`}/>
                                     </ListItem>
@@ -137,7 +137,7 @@ const Accounts = ({loggedIn, onLogin}) => {
                                         gap: '10px'
                                     }}>
                                         {transaction.sourceAccount
-                                            ? <ListItemText primary={`From account: ${transaction.sourceAccount.id}`}/>
+                                            ? <ListItemText primary={`From account: ${transaction.sourceAccount?.id}`}/>
                                             : <ListItemText primary="Funds addedㅤ"/>
                                         }
                                         <ListItemText primary={`Amount: ${transaction.transactionAmount}`}/>
