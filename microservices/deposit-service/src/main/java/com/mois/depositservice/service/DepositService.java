@@ -36,7 +36,7 @@ public class DepositService {
         deposit.setOwnerProfileId(createDepositDto.getOwnerProfileId());
         deposit.setDepositedBalance(createDepositDto.getDepositedBalance());
         deposit.setStartDate(LocalDateTime.now());
-        deposit.setEndDate(LocalDateTime.of(2024, 4, 20, 21, 23));
+        deposit.setEndDate(LocalDateTime.now().plusMinutes(1));
         depositRepository.save(deposit);
 
         TransferToDepositDto transferToDepositDto = new TransferToDepositDto();
