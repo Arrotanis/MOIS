@@ -5,9 +5,11 @@ import com.mois.depositservice.model.Deposit;
 import com.mois.depositservice.service.DepositService;
 import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -27,5 +29,19 @@ public class DepositController {
     @ResponseStatus(HttpStatus.OK)
     public List<Deposit> getDepositsByLinkedAccountId(@PathVariable Long linkedAccountId){
         return depositService.getAllLinkedAccountDeposits(linkedAccountId);
+    }
+
+    @GetMapping("/localdatetest")
+    public String localDateTime(){
+        LocalDateTime now = LocalDateTime.now();
+        int day = 30;
+        int month = 11;
+        int year = 1945;
+        int hour = 14;
+        int minutes = 32;
+        int seconds = 0;
+
+        LocalDateTime customDate = LocalDateTime.of(year,month,day,hour,minutes);
+        return customDate.toString();
     }
 }
