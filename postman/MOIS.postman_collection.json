@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "34862a34-5045-428d-8e3b-b28db94268fd",
+		"_postman_id": "5be91be0-57c0-4546-ba50-6b0f2ab245dd",
 		"name": "MOIS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -18,7 +18,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"description\": \"Payment for services\",\r\n    \"transactionAmount\": 100,\r\n    \"sourceAccountId\": 1,\r\n    \"targetAccountId\": 2\r\n}\r\n",
+									"raw": "{\r\n    \"description\": \"Payment for services\",\r\n    \"transactionAmount\": 2300,\r\n    \"sourceAccount\": 1,\r\n    \"targetAccount\": 2\r\n}\r\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -26,7 +26,7 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:8081/api/transaction/create-transaction?sourceAccountId=4&targetAccountId=2",
+									"raw": "localhost:8081/api/transaction/create-transaction",
 									"host": [
 										"localhost"
 									],
@@ -35,16 +35,6 @@
 										"api",
 										"transaction",
 										"create-transaction"
-									],
-									"query": [
-										{
-											"key": "sourceAccountId",
-											"value": "4"
-										},
-										{
-											"key": "targetAccountId",
-											"value": "2"
-										}
 									]
 								}
 							},
@@ -55,8 +45,17 @@
 							"request": {
 								"method": "POST",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"targetAccountId\": 1,\r\n    \"addBalanceAmount\": 11000\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
-									"raw": "localhost:8081/api/transaction/add-balance?accountId=1&amountToAdd=500",
+									"raw": "localhost:8081/api/transaction/add-balance",
 									"host": [
 										"localhost"
 									],
@@ -65,16 +64,6 @@
 										"api",
 										"transaction",
 										"add-balance"
-									],
-									"query": [
-										{
-											"key": "accountId",
-											"value": "1"
-										},
-										{
-											"key": "amountToAdd",
-											"value": "500"
-										}
 									]
 								}
 							},
@@ -85,8 +74,17 @@
 							"request": {
 								"method": "POST",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"accountId\": 1,\r\n    \"amountToTransfer\": 100\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
-									"raw": "localhost:8081/api/transaction/deposit-transfer?accountId=1&amountToTransfer=125",
+									"raw": "localhost:8081/api/transaction/deposit-transfer",
 									"host": [
 										"localhost"
 									],
@@ -95,16 +93,6 @@
 										"api",
 										"transaction",
 										"deposit-transfer"
-									],
-									"query": [
-										{
-											"key": "accountId",
-											"value": "1"
-										},
-										{
-											"key": "amountToTransfer",
-											"value": "125"
-										}
 									]
 								}
 							},
@@ -112,9 +100,21 @@
 						},
 						{
 							"name": "Accounts",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
 							"request": {
 								"method": "GET",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
 									"raw": "localhost:8081/api/transaction/accounts/1",
 									"host": [
@@ -138,8 +138,17 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"targetAccountId\": 1,\r\n  \"addBalanceAmount\": 1069\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:8080/api/transaction/add-balance?accountId=1&amountToAdd=500",
+							"raw": "localhost:8080/api/transaction/add-balance",
 							"host": [
 								"localhost"
 							],
@@ -148,16 +157,6 @@
 								"api",
 								"transaction",
 								"add-balance"
-							],
-							"query": [
-								{
-									"key": "accountId",
-									"value": "1"
-								},
-								{
-									"key": "amountToAdd",
-									"value": "500"
-								}
 							]
 						}
 					},
@@ -165,9 +164,21 @@
 				},
 				{
 					"name": "Accounts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "localhost:8080/api/transaction/accounts/1",
 							"host": [
@@ -208,6 +219,27 @@
 								"api",
 								"transaction",
 								"create-account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transaction History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/transaction/transactions/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"transaction",
+								"transactions",
+								"3"
 							]
 						}
 					},
@@ -262,30 +294,25 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"linkedAccountId\": 1,\r\n    \"ownerProfileId\": 1,\r\n    \"depositedBalance\": 10000\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:8082/api/deposit/create?linkedAccountId=1&ownerProfileId=1&depositedBalance=333",
+							"raw": "localhost:8080/api/deposit/create",
 							"host": [
 								"localhost"
 							],
-							"port": "8082",
+							"port": "8080",
 							"path": [
 								"api",
 								"deposit",
 								"create"
-							],
-							"query": [
-								{
-									"key": "linkedAccountId",
-									"value": "1"
-								},
-								{
-									"key": "ownerProfileId",
-									"value": "1"
-								},
-								{
-									"key": "depositedBalance",
-									"value": "333"
-								}
 							]
 						}
 					},
@@ -295,7 +322,37 @@
 		},
 		{
 			"name": "authentication-service",
-			"item": []
+			"item": [
+				{
+					"name": "logged user info",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "api-gateway",
