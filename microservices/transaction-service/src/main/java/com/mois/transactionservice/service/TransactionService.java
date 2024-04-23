@@ -25,6 +25,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
 
+    @Transactional
     public void createTransaction(TransactionDto transactionDto) {
         Transaction transaction = new Transaction();
         transaction.setTransactionNumber(UUID.randomUUID().toString());
@@ -38,26 +39,27 @@ public class TransactionService {
             Account sourceAccount = optionalSourceAccount.get();
             Account targetAccount = optionalTargetAccount.get();
 
-
             // Check if the source account has sufficient balance
             if (sourceAccount.getBalance() < transaction.getTransactionAmount()) {
                 throw new IllegalArgumentException("Insufficient balance in the source account");
             }
 
-            transaction.setSourceAccount(sourceAccount);
-            transaction.setTargetAccount(targetAccount);
-            sourceAccount.getSourceTransactions().add(transaction);
-            targetAccount.getTargetTransactions().add(transaction);
             sourceAccount.setBalance(sourceAccount.getBalance()-transaction.getTransactionAmount());
             targetAccount.setBalance(targetAccount.getBalance()+transaction.getTransactionAmount());
 
-            // Save the transaction
+            transaction.setSourceAccount(sourceAccount.getId());
+            transaction.setTargetAccount(targetAccount.getId());
+
+            sourceAccount.getSourceTransactions().add(transaction);
+            targetAccount.getTargetTransactions().add(transaction);
+
+            accountRepository.save(sourceAccount);
+            accountRepository.save(targetAccount);
+
             transactionRepository.save(transaction);
 
 
-            // Update both accounts
-            accountRepository.save(sourceAccount);
-            accountRepository.save(targetAccount);
+
         } else {
             // Handle the case when either source or target account does not exist
             throw new EntityNotFoundException("Source or target account not found, or amount is even or less than 0");
@@ -82,15 +84,17 @@ public class TransactionService {
             int currentBalance = account.getBalance();
             int newBalance = currentBalance + addBalanceDto.getAddBalanceAmount();
             account.setBalance(newBalance);
-            accountRepository.save(account);
+
 
             Transaction transaction = new Transaction();
-            transaction.setTargetAccount(account);
+            transaction.setTargetAccount(account.getId());
             transaction.setTransactionAmount(addBalanceDto.getAddBalanceAmount());
             transaction.setDescription("Income from outside source");
             transaction.setTransactionNumber(UUID.randomUUID().toString());
             account.getTargetTransactions().add(transaction);
+
             transactionRepository.save(transaction);
+            accountRepository.save(account);
             System.out.println("addBalance guchi");
         } else {
             throw new EntityNotFoundException("Account not found with ID: " + addBalanceDto.getTargetAccountId());
@@ -104,14 +108,16 @@ public class TransactionService {
             int currentBalance = account.getBalance();
             int newBalance = currentBalance - transferToDepositDto.getAmountToTransfer();
             account.setBalance(newBalance);
-            accountRepository.save(account);
+
 
             Transaction transaction = new Transaction();
-            transaction.setSourceAccount(account);
+            transaction.setSourceAccount(account.getId());
             transaction.setTransactionAmount(transferToDepositDto.getAmountToTransfer());
             transaction.setDescription("Transfer to deposit");
             transaction.setTransactionNumber(UUID.randomUUID().toString());
             account.getTargetTransactions().add(transaction);
+
+            accountRepository.save(account);
             transactionRepository.save(transaction);
 
             System.out.println("transferToDeposit guchi");
@@ -126,8 +132,8 @@ public class TransactionService {
             System.out.println("Id accountu: "+element.getId());
             System.out.println("Balance accountu: "+element.getBalance());
         }
-        return akounty;
-        //return accountRepository.findByOwnerProfileId(ownerProfileId);
+        //return akounty;
+        return accountRepository.findByOwnerProfileId(ownerProfileId);
     }
 
     public List<Transaction> getTransactionHistory(Long accountId1){
