@@ -48,8 +48,8 @@ const Accounts = ({loggedIn, onLogin}) => {
     const handleAddBalance = () => {
         setLoading(true);
         axios.post('http://localhost:8080/api/transaction/add-balance', {
-            targetAccountId: selectedAccountId.id,
-            addBalanceAmount: balanceAmounts[selectedAccountId.id]
+            targetAccountId: selectedAccountId?.id,
+            addBalanceAmount: balanceAmounts[selectedAccountId?.id]
         })
             .then(response => {
                 console.log('Balance added successfully:', response.data);
@@ -107,14 +107,14 @@ const Accounts = ({loggedIn, onLogin}) => {
                         <DialogTitle>Account Details</DialogTitle>
                         <DialogContent>
                             <Typography variant="subtitle1">Account
-                                number: {selectedAccountId && selectedAccountId.id}</Typography>
+                                number: {selectedAccountId && selectedAccountId?.id}</Typography>
                             <Typography
                                 variant="subtitle1">Balance: {selectedAccountId && selectedAccountId.balance}</Typography>
                             <TextField
                                 type="number"
                                 label="Add Balance Amount"
-                                value={balanceAmounts[selectedAccountId.id] || ''}
-                                onChange={(e) => handleBalanceChange(selectedAccountId.id, e.target.value)}
+                                value={balanceAmounts[selectedAccountId?.id] || ''}
+                                onChange={(e) => handleBalanceChange(selectedAccountId?.id, e.target.value)}
                                 fullWidth
                                 variant="outlined"
                                 sx={{marginTop: '1rem'}}

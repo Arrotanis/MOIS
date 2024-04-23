@@ -223,7 +223,7 @@ const Accounts = () => {
                                 disabled={loading || !balanceAmounts[account.id]}
                                 sx={{ marginTop: '1rem' }}
                             >
-                                Add Balance
+                               Add Balance
                             </Button>
                         </div>
                     ))}
