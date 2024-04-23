@@ -72,8 +72,8 @@ const Accounts = ({loggedIn, onLogin}) => {
         setLoading(true);
         console.log('Selected date:', termDate.format('YYYY-MM-DD'));
         axios.post('http://localhost:8080/api/deposit/create', {
+            targetAccountId: selectedAccountId?.id,
             date: termDate.format('YYYY-MM-DD')
-
         })
             .then(response => {
                 console.log('Deposit created successfully:', response.data);
