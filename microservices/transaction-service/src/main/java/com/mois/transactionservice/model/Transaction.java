@@ -23,8 +23,16 @@ public class Transaction {
     private String description;
     private int transactionAmount;
 
+    /*
     @ManyToOne
     private Account targetAccount;
     @ManyToOne
     private Account sourceAccount;
+    */
+
+
+    private Long targetAccount;
+
+    private Long sourceAccount;
+
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import {
     TextField,
@@ -14,17 +14,17 @@ import {
     DialogActions
 } from '@mui/material';
 
-const Accounts = ({ loggedIn, onLogin }) => {
+const Accounts = ({loggedIn, onLogin}) => {
     const [accountData, setAccountData] = useState(null);
-    const [accountId, setAccountId] = useState('');
+    const [profileId, setProfileId] = useState('');
     const [loading, setLoading] = useState(false);
     const [balanceAmounts, setBalanceAmounts] = useState({});
-    const [selectedAccountId, setSelectedAccountId] = useState(null);
+    const [selectedAccount, setSelectedAccount] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
 
     const sendLoginRequest = () => {
         setLoading(true);
-        axios.get('http://localhost:8080/api/transaction/accounts/' + accountId)
+        axios.get('http://localhost:8080/api/transaction/accounts/' + profileId)
             .then(response => {
                 setAccountData(response.data);
                 setLoading(false);
@@ -37,7 +37,7 @@ const Accounts = ({ loggedIn, onLogin }) => {
     };
 
     const handleAccountClick = (account) => {
-        setSelectedAccountId(account);
+        setSelectedAccount(account);
         setOpenDialog(true);
     };
 
@@ -48,8 +48,8 @@ const Accounts = ({ loggedIn, onLogin }) => {
     const handleAddBalance = () => {
         setLoading(true);
         axios.post('http://localhost:8080/api/transaction/add-balance', {
-            targetAccountId: selectedAccountId?.id,
-            addBalanceAmount: balanceAmounts[selectedAccountId?.id]
+            targetAccountId: selectedAccount?.id,
+            addBalanceAmount: balanceAmounts[selectedAccount?.id]
         })
             .then(response => {
                 console.log('Balance added successfully:', response.data);
@@ -76,8 +76,8 @@ const Accounts = ({ loggedIn, onLogin }) => {
                     <TextField
                         id="account"
                         label="Login (ID)"
-                        value={accountId}
-                        onChange={(e) => setAccountId(e.target.value)}
+                        value={profileId}
+                        onChange={(e) => setProfileId(e.target.value)}
                         fullWidth
                         variant="outlined"
                     />
@@ -86,9 +86,9 @@ const Accounts = ({ loggedIn, onLogin }) => {
                         color="primary"
                         onClick={sendLoginRequest}
                         disabled={loading}
-                        sx={{ marginTop: '1rem' }}
+                        sx={{marginTop: '1rem'}}
                     >
-                        {loading ? <CircularProgress size={24} /> : 'Login'}
+                        {loading ? <CircularProgress size={24}/> : 'Login'}
                     </Button>
                 </>
             )}
@@ -97,42 +97,51 @@ const Accounts = ({ loggedIn, onLogin }) => {
                     <Typography variant="h6">Accounts</Typography>
                     <List>
                         {accountData.map(account => (
-                            <ListItem key={account.id} button onClick={() => handleAccountClick(account)}>
-                                <ListItemText primary={`Account number: ${account.id}`} />
-                                <ListItemText primary={`Balance: ${account.balance}`} />
+                            <ListItem key={account?.id} button onClick={() => handleAccountClick(account)}>
+                                <ListItemText primary={`Account number: ${account?.id}`}/>
+                                <ListItemText primary={`Balance: ${account?.balance}`}/>
                             </ListItem>
                         ))}
                     </List>
                     <Dialog open={openDialog} onClose={handleCloseDialog}>
                         <DialogTitle>Account Details</DialogTitle>
                         <DialogContent>
-                            <Typography variant="subtitle1">Account number: {selectedAccountId?.id}</Typography>
-                            <Typography variant="subtitle1">Balance: {selectedAccountId?.balance}</Typography>
+                            <Typography variant="subtitle1">Account number: {selectedAccount?.id}</Typography>
+                            <Typography variant="subtitle1">Balance: {selectedAccount?.balance}</Typography>
                             <TextField
                                 type="number"
                                 label="Add Balance Amount"
-                                value={balanceAmounts[selectedAccountId?.id] || ''}
-                                onChange={(e) => handleBalanceChange(selectedAccountId?.id, e.target.value)}
+                                value={balanceAmounts[selectedAccount?.id] || ''}
+                                onChange={(e) => handleBalanceChange(selectedAccount?.id, e.target.value)}
                                 fullWidth
                                 variant="outlined"
-                                sx={{ marginBottom: '1rem' }}
+                                sx={{marginBottom: '1rem'}}
                             />
                             <Typography variant="subtitle1">Transaction History:</Typography>
                             <List>
-                                {selectedAccountId?.sourceTransactions.map(transaction => (
-                                    <ListItem key={transaction.id}>
-                                        <ListItemText primary={`Source Account: ${transaction.sourceAccount}`} />
-                                        <ListItemText primary={`Target Account: ${transaction.targetAccount}`} />
-                                        <ListItemText primary={`Transaction Amount: ${transaction.transactionAmount}`} />
-                                        <ListItemText primary={`Description: ${transaction.description}`} />
+                                {selectedAccount?.sourceTransactions?.map(transaction => (
+                                    <ListItem key={transaction.id} sx={{
+                                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                                        display: 'flex',
+                                        gap: '10px'
+                                    }}>
+                                        <ListItemText primary={`To account: ${transaction.targetAccount?.id}`}/>
+                                        <ListItemText primary={`Amount: ${transaction.transactionAmount}`}/>
+                                        <ListItemText primary={`Description: ${transaction.description}`}/>
                                     </ListItem>
                                 ))}
-                                {selectedAccountId?.targetTransactions.map(transaction => (
-                                    <ListItem key={transaction.id}>
-                                        <ListItemText primary={`Source Account: ${transaction.sourceAccount}`} />
-                                        <ListItemText primary={`Target Account: ${transaction.targetAccount}`} />
-                                        <ListItemText primary={`Transaction Amount: ${transaction.transactionAmount}`} />
-                                        <ListItemText primary={`Description: ${transaction.description}`} />
+                                {selectedAccount?.targetTransactions?.map(transaction => (
+                                    <ListItem key={transaction.id} sx={{
+                                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                                        display: 'flex',
+                                        gap: '10px'
+                                    }}>
+                                        {transaction.sourceAccount
+                                            ? <ListItemText primary={`From account: ${transaction.sourceAccount?.id}`}/>
+                                            : <ListItemText primary="Funds addedㅤ"/>
+                                        }
+                                        <ListItemText primary={`Amount: ${transaction.transactionAmount}`}/>
+                                        <ListItemText primary={`Description: ${transaction.description}`}/>
                                     </ListItem>
                                 ))}
                             </List>
