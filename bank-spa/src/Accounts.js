@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import {
     TextField,
@@ -14,7 +14,7 @@ import {
     DialogActions
 } from '@mui/material';
 
-const Accounts = ({ loggedIn, onLogin }) => {
+const Accounts = ({loggedIn, onLogin}) => {
     const [accountData, setAccountData] = useState(null);
     const [accountId, setAccountId] = useState('');
     const [loading, setLoading] = useState(false);
@@ -86,9 +86,9 @@ const Accounts = ({ loggedIn, onLogin }) => {
                         color="primary"
                         onClick={sendLoginRequest}
                         disabled={loading}
-                        sx={{ marginTop: '1rem' }}
+                        sx={{marginTop: '1rem'}}
                     >
-                        {loading ? <CircularProgress size={24} /> : 'Login'}
+                        {loading ? <CircularProgress size={24}/> : 'Login'}
                     </Button>
                 </>
             )}
@@ -98,8 +98,8 @@ const Accounts = ({ loggedIn, onLogin }) => {
                     <List>
                         {accountData.map(account => (
                             <ListItem key={account.id} button onClick={() => handleAccountClick(account)}>
-                                <ListItemText primary={`Account number: ${account.id}`} />
-                                <ListItemText primary={`Balance: ${account.balance}`} />
+                                <ListItemText primary={`Account number: ${account.id}`}/>
+                                <ListItemText primary={`Balance: ${account.balance}`}/>
                             </ListItem>
                         ))}
                     </List>
@@ -115,24 +115,33 @@ const Accounts = ({ loggedIn, onLogin }) => {
                                 onChange={(e) => handleBalanceChange(selectedAccountId?.id, e.target.value)}
                                 fullWidth
                                 variant="outlined"
-                                sx={{ marginBottom: '1rem' }}
+                                sx={{marginBottom: '1rem'}}
                             />
                             <Typography variant="subtitle1">Transaction History:</Typography>
                             <List>
                                 {selectedAccountId?.sourceTransactions.map(transaction => (
-                                    <ListItem key={transaction.id}>
-                                        <ListItemText primary={`Source Account: ${transaction.sourceAccount}`} />
-                                        <ListItemText primary={`Target Account: ${transaction.targetAccount}`} />
-                                        <ListItemText primary={`Transaction Amount: ${transaction.transactionAmount}`} />
-                                        <ListItemText primary={`Description: ${transaction.description}`} />
+                                    <ListItem key={transaction.id} sx={{
+                                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                                        display: 'flex',
+                                        gap: '10px'
+                                    }}>
+                                        <ListItemText primary={`To account: ${transaction.targetAccount.id}`}/>
+                                        <ListItemText primary={`Amount: ${transaction.transactionAmount}`}/>
+                                        <ListItemText primary={`Description: ${transaction.description}`}/>
                                     </ListItem>
                                 ))}
                                 {selectedAccountId?.targetTransactions.map(transaction => (
-                                    <ListItem key={transaction.id}>
-                                        <ListItemText primary={`Source Account: ${transaction.sourceAccount}`} />
-                                        <ListItemText primary={`Target Account: ${transaction.targetAccount}`} />
-                                        <ListItemText primary={`Transaction Amount: ${transaction.transactionAmount}`} />
-                                        <ListItemText primary={`Description: ${transaction.description}`} />
+                                    <ListItem key={transaction.id} sx={{
+                                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                                        display: 'flex',
+                                        gap: '10px'
+                                    }}>
+                                        {transaction.sourceAccount
+                                            ? <ListItemText primary={`From account: ${transaction.sourceAccount.id}`}/>
+                                            : <ListItemText primary="Funds addedㅤ"/>
+                                        }
+                                        <ListItemText primary={`Amount: ${transaction.transactionAmount}`}/>
+                                        <ListItemText primary={`Description: ${transaction.description}`}/>
                                     </ListItem>
                                 ))}
                             </List>
