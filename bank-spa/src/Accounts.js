@@ -73,6 +73,7 @@ const Accounts = ({loggedIn, onLogin}) => {
         console.log('Selected date:', termDate.format('YYYY-MM-DD'));
         axios.post('http://localhost:8080/api/deposit/create', {
             targetAccountId: selectedAccountId?.id,
+            addBalanceAmount: balanceAmounts[selectedAccountId?.id],
             date: termDate.format('YYYY-MM-DD')
         })
             .then(response => {
@@ -152,7 +153,7 @@ const Accounts = ({loggedIn, onLogin}) => {
                                         display: 'flex',
                                         gap: '10px'
                                     }}>
-                                        <ListItemText primary={`To account: ${transaction.targetAccount?.id}`}/>
+                                        <ListItemText primary={`To account: ${transaction.targetAccount}`}/>
                                         <ListItemText primary={`Amount: ${transaction.transactionAmount}`}/>
                                         <ListItemText primary={`Description: ${transaction.description}`}/>
                                     </ListItem>
@@ -164,7 +165,7 @@ const Accounts = ({loggedIn, onLogin}) => {
                                         gap: '10px'
                                     }}>
                                         {transaction.sourceAccount
-                                            ? <ListItemText primary={`From account: ${transaction.sourceAccount?.id}`}/>
+                                            ? <ListItemText primary={`From account: ${transaction.sourceAccount}`}/>
                                             : <ListItemText primary="Funds addedㅤ"/>
                                         }
                                         <ListItemText primary={`Amount: ${transaction.transactionAmount}`}/>
