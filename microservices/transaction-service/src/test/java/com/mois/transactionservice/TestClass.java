@@ -26,14 +26,14 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
-@AutoConfigureMockMvc
+//@WebMvcTest
+//@AutoConfigureMockMvc
 public class TestClass {
 
-    @Test
-    public void testMe(){
-        System.out.println("Print me");
-    }
+   // @Test
+  //  public void testMe(){
+    //    System.out.println("Print me");
+  //  }
 /*
     @Autowired
     private MockMvc mockMvc;

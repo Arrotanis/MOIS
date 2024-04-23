@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  deposit-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DB_HOST=mariadb1
+      - spring.datasource.username=root
+      - spring.datasource.password=pass
+      - spring.application.name=deposit-service
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    name: my-network  # Specify custom network name
+    driver: bridge
