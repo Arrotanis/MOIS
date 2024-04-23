@@ -101,6 +101,33 @@ public class TransactionService {
         }
     }
 
+    @Transactional
+    public void addBalanceFromDeposit(AddBalanceDto addBalanceDto) {
+        System.out.println("Davan add lanace na ucet !!!");
+        System.out.println("Na acc: "+ addBalanceDto.getTargetAccountId()+", tolik balance:"+addBalanceDto.getAddBalanceAmount());
+        Optional<Account> optionalAccount = accountRepository.findById(addBalanceDto.getTargetAccountId());
+        if (optionalAccount.isPresent()) {
+            Account account = optionalAccount.get();
+            int currentBalance = account.getBalance();
+            int newBalance = currentBalance + addBalanceDto.getAddBalanceAmount();
+            account.setBalance(newBalance);
+
+
+            Transaction transaction = new Transaction();
+            transaction.setTargetAccount(account.getId());
+            transaction.setTransactionAmount(addBalanceDto.getAddBalanceAmount());
+            transaction.setDescription("Term deposit interest earnings");
+            transaction.setTransactionNumber(UUID.randomUUID().toString());
+            account.getTargetTransactions().add(transaction);
+
+            transactionRepository.save(transaction);
+            accountRepository.save(account);
+            System.out.println("addBalance guchi");
+        } else {
+            throw new EntityNotFoundException("Account not found with ID: " + addBalanceDto.getTargetAccountId());
+        }
+    }
+
     public void transferToDeposit(TransferToDepositDto transferToDepositDto) {
         Optional<Account> optionalAccount = accountRepository.findById(transferToDepositDto.getAccountId());
         if (optionalAccount.isPresent()) {

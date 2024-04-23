@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -31,13 +32,33 @@ public class DepositService {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public void createDeposit(CreateDepositDto createDepositDto) {
+        System.out.println("Balance: "+createDepositDto.getDepositedBalance()+", owner profile id: "+createDepositDto.getOwnerProfileId()+", linked account id:"+createDepositDto.getLinkedAccountId()+", Datum:"+createDepositDto.getEndDateTime());
+
+        LocalDateTime now = LocalDateTime.now().plusMinutes(1);
+        int hour = now.getHour();
+        int minutes = now.getMinute();
+        int seconds = now.getSecond();
+        //String date = "2024-04-24";
+        String date = createDepositDto.getEndDateTime();
+        String formatedHour = String.format("%02d", hour);
+        String formatedMinutes = String.format("%02d", minutes);
+        String formatedSeconds = String.format("%02d", seconds);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime customDate = LocalDateTime.parse(date+"T"+formatedHour+":"+formatedMinutes+":"+formatedSeconds, formatter);
+
         Deposit deposit = new Deposit();
         deposit.setLinkedAccountId(createDepositDto.getLinkedAccountId());
-        deposit.setInterestRate(4);
+
+        //((( 0.1 / 365) x početSekund) + 1 ) x balance
+        long countSeconds = Duration.between(LocalDateTime.now(),customDate).toSeconds();
+        float calculateInterest = (float)((((0.1/365)*countSeconds)+1));
+        System.out.println("Interest je: "+calculateInterest+", napocitany sekundy: "+countSeconds);
+        deposit.setInterestRate(calculateInterest);
         deposit.setOwnerProfileId(createDepositDto.getOwnerProfileId());
         deposit.setDepositedBalance(createDepositDto.getDepositedBalance());
         deposit.setStartDate(LocalDateTime.now());
-        deposit.setEndDate(LocalDateTime.now().plusMinutes(1));
+        deposit.setEndDate(customDate);
+        //deposit.setEndDate(LocalDateTime.now().plusMinutes(1));
         depositRepository.save(deposit);
 
         TransferToDepositDto transferToDepositDto = new TransferToDepositDto();
@@ -94,7 +115,7 @@ public class DepositService {
                 .uri(uriBuilder -> uriBuilder
                         .scheme("http")
                         .host("transaction-service")
-                        .path("api/transaction/add-balance")
+                        .path("api/transaction/add-balance-deposit")
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(addBalanceDto))

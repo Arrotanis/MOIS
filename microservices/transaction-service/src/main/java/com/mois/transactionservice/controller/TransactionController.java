@@ -43,6 +43,17 @@ public class TransactionController {
         transactionService.addBalance(addBalanceDto);
         return "Balance added to account successfully";
     }
+    @PostMapping("/add-balance-deposit")
+    @ResponseStatus(HttpStatus.OK)
+    @Transactional
+    public String addBalanceToAccountFromDeposit(@RequestBody AddBalanceDto addBalanceDto) {
+        System.out.println("Z controleru acc id: "+addBalanceDto.getTargetAccountId());
+        transactionService.addBalanceFromDeposit(addBalanceDto);
+        return "Balance added to account successfully";
+    }
+
+
+
 
     @PostMapping("/deposit-transfer")
     @ResponseStatus(HttpStatus.OK)

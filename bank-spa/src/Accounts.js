@@ -72,9 +72,10 @@ const Accounts = ({loggedIn, onLogin}) => {
         setLoading(true);
         console.log('Selected date:', termDate.format('YYYY-MM-DD'));
         axios.post('http://localhost:8080/api/deposit/create', {
-            targetAccountId: selectedAccountId?.id,
-            addBalanceAmount: balanceAmounts[selectedAccountId?.id],
-            date: termDate.format('YYYY-MM-DD')
+            linkedAccountId: selectedAccountId?.id,
+            depositedBalance: balanceAmounts[selectedAccountId?.id],
+            endDateTime: termDate.format('YYYY-MM-DD'),
+            ownerProfileId: null
         })
             .then(response => {
                 console.log('Deposit created successfully:', response.data);
