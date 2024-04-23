@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -112,7 +113,9 @@ public class DepositService {
         System.out.println("myScheduledMethod guchi");
     }
 
-
+    public List<Deposit> getAllLinkedAccountDeposits(Long linkedAccountId){
+        return depositRepository.findDepositByLinkedAccountId(linkedAccountId);
+    }
 
     //returnDeposit
 }
