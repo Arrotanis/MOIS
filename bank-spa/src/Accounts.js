@@ -17,6 +17,7 @@ import {
     DialogContent,
     DialogActions
 } from '@mui/material';
+import CreateAccountForm from "./CreateAccountForm";
 
 let date = Date()
 const Accounts = ({loggedIn, onLogin}) => {
@@ -92,6 +93,20 @@ const Accounts = ({loggedIn, onLogin}) => {
         }));
     };
 
+    const handleCreateAccount = () => {
+        setLoading(true);
+        axios.post('http://localhost:8080/api/transaction/create-account', {
+            ownerAccountId: accountId
+        })
+            .then(response => {
+                console.log('Account created successfully:', response.data);
+                sendLoginRequest();
+            })
+            .catch(error => {
+                console.error('Error creating account:', error);
+            });
+    };
+
     return (
         <div>
             {!loggedIn && (
@@ -121,30 +136,36 @@ const Accounts = ({loggedIn, onLogin}) => {
                     <Typography variant="h6">
                         Total balance: {accountData.reduce((total, account) => total + account.balance, 0)}
                     </Typography>
+                    <DialogContent>
+                        <Button onClick={handleCreateAccount} variant="contained" color="primary">
+                            Open new account
+                        </Button>
+                    </DialogContent>
                     <List>
                         {accountData.map(account => (
                             <ListItem key={account.id} button onClick={() => handleAccountClick(account)}>
-                                <ListItemText primary={`Account number: ${account.id}`} />
-                                <ListItemText primary={`Balance: ${account.balance}`} />
+                                <ListItemText primary={`Account number: ${account.id}`}/>
+                                <ListItemText primary={`Balance: ${account.balance}`}/>
                             </ListItem>
                         ))}
                     </List>
                     <Dialog open={openDialog} onClose={handleCloseDialog}>
                         <DialogTitle>Account details</DialogTitle>
                         <DialogContent>
-                            <div style={{ height: '1rem' }} />
-                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                            <div style={{height: '1rem'}}/>
+                            <div style={{display: 'flex', alignItems: 'center', marginBottom: '1rem'}}>
                                 <TextField
                                     type="number"
                                     label="Amount"
                                     value={balanceAmounts[selectedAccountId?.id] || ''}
                                     onChange={(e) => handleBalanceChange(selectedAccountId?.id, e.target.value)}
                                     variant="outlined"
-                                    sx={{ flex: 1, marginRight: '1rem' }}
+                                    sx={{flex: 1, marginRight: '1rem'}}
                                 />
-                                <Button onClick={handleAddBalance} color="primary" variant="contained">Add balance</Button>
+                                <Button onClick={handleAddBalance} color="primary" variant="contained">Add
+                                    balance</Button>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                            <div style={{display: 'flex', alignItems: 'center', marginBottom: '1rem'}}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         value={termDate}
@@ -152,7 +173,8 @@ const Accounts = ({loggedIn, onLogin}) => {
                                         minDate={dayjs().add(6, 'month')}
                                     />
                                 </LocalizationProvider>
-                                <Button onClick={handleAddTerm} color="primary" variant="contained" sx={{ marginLeft: '1rem' }}>Add term deposit</Button>
+                                <Button onClick={handleAddTerm} color="primary" variant="contained"
+                                        sx={{marginLeft: '1rem'}}>Add term deposit</Button>
                             </div>
                             <Typography variant="subtitle1">Transaction History:</Typography>
                             <List>

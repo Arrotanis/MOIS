@@ -1,38 +1,44 @@
 import React, { useState } from 'react';
+import { TextField, Button } from '@mui/material';
+import axios from 'axios';
 
-function CreateAccountForm() {
+const CreateAccountForm = () => {
     const [ownerAccountId, setOwnerAccountId] = useState('');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const response = await fetch('http://localhost:8080/api/transaction/create-account', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json', // Correctly indicates that the body is JSON
-            },
-            body: JSON.stringify({ ownerAccountId: ownerAccountId }) // Correctly format the body as JSON
-        });
-
-        if (response.ok) {
-            const message = await response.text();
-            alert(message);
-        } else {
+        try {
+            const response = await axios.post('http://localhost:8080/api/transaction/create-account', {
+                ownerAccountId: ownerAccountId
+            });
+            if (response.ok) {
+                const message = response.data;
+                alert(message);
+            } else {
+                throw new Error('Failed to create account');
+            }
+        } catch (error) {
+            console.error('Error creating account:', error);
             alert('Failed to create account');
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <label>
-                Owner Account ID:
-                <input
-                    type="text"
-                    value={ownerAccountId}
-                    onChange={(e) => setOwnerAccountId(e.target.value)}
-                />
-            </label>
-            <button type="submit">Create Account</button>
+            <TextField
+                fullWidth
+                label="Owner Account ID"
+                type="text"
+                value={ownerAccountId}
+                onChange={(e) => setOwnerAccountId(e.target.value)}
+                variant="outlined"
+                sx={{ marginBottom: '1rem' }}
+            />
+            <Button type="submit" variant="contained" color="primary">
+                Create Account
+            </Button>
         </form>
     );
-}
+};
+
 export default CreateAccountForm;
