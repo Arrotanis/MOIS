@@ -32,15 +32,6 @@ function App() {
                         )}
                     </Toolbar>
                 </AppBar>
-                {loggedIn && (
-                    <Container sx={{ textAlign: 'center', marginTop: '1rem' }}>
-                        <Button variant="contained" color="primary">
-                            <Link to={`/${userId}`} style={{ textDecoration: 'none', color: 'white' }}>
-                                View Account
-                            </Link>
-                        </Button>
-                    </Container>
-                )}
                 {!loggedIn && (
                     <Container sx={{ textAlign: 'center', marginTop: '1rem' }}>
                         <Button variant="contained" color="primary" href="http://localhost:8083/login">

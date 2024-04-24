@@ -33,7 +33,7 @@ const Accounts = ({loggedIn, onLogin}) => {
 
     useEffect(() => {
         console.log("ID:", ID); // Print the ID
-        setAccountId(ID); // Set the accountId using the ID from the route parameter
+        setAccountId(ID);// Set the accountId using the ID from the route parameter
         sendLoginRequest(); // Fetch account data when the component mounts or when the ID changes
     }, [ID]); // Add ID to the dependency array
 
