@@ -32,10 +32,10 @@ public class DepositService {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public void createDeposit(CreateDepositDto createDepositDto) {
-        System.out.println("Balance: "+createDepositDto.getDepositedBalance()+", owner profile id: "+createDepositDto.getOwnerProfileId()+", linked account id:"+createDepositDto.getLinkedAccountId()+", Datum:"+createDepositDto.getEndDateTime());
+
         int currentAccountBalance = getAccountBalance(createDepositDto.getLinkedAccountId()).block();
-        System.out.println("Dostal jsem balance z transaction service: "+currentAccountBalance);
-        if (currentAccountBalance < createDepositDto.getDepositedBalance()) {
+
+        if (currentAccountBalance < createDepositDto.getDepositedBalance() || createDepositDto.getDepositedBalance() < 0) {
             throw new RuntimeException("Insufficient funds in the account.");
         }
         LocalDateTime now = LocalDateTime.now().plusMinutes(1);
