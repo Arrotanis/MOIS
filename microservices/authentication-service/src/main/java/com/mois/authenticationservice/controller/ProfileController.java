@@ -5,6 +5,7 @@ import com.mois.authenticationservice.model.Profile;
 import com.mois.authenticationservice.repository.ProfileRepository;
 import com.mois.authenticationservice.service.ProfileService;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("")
 public class ProfileController {
+
     private final ProfileService profileService;
 
     public ProfileController(ProfileService profileService) {
@@ -34,8 +37,19 @@ public class ProfileController {
         String name = (String) attributes.get("name");
         Profile profile = profileService.getProfileByName(name);
 
-        // Construct the welcome message
-        String message = String.format("Welcome %s, Your id is %s", name, profile.getId());
+        // Check if profile is found
+        if (profile != null) {
+            // Construct the welcome message
+            String message = String.format("Welcome %s, your id is %s", name, profile.getId());
+
+            // Populate the response map
+            userProfile.put("id", profile.getId());
+            userProfile.put("name", name);
+            userProfile.put("message", message);
+        } else {
+            // Handle profile not found case
+            userProfile.put("error", "Profile not found");
+        }
 
         return userProfile;
     }
