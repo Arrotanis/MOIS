@@ -67,12 +67,6 @@ public class TransactionController {
         return transactionService.getAccountsByOwnerProfileId(ownerProfileId);
     }
 
-    @GetMapping("/transactions/{accountId}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Transaction> getTransactionsByAccount(@PathVariable Long accountId){
-        return transactionService.getTransactionHistory(accountId);
-    }
-
     @GetMapping("/get-balance/{accountId}")
     public int getBalanceFromAccount(@PathVariable Long accountId){
         return transactionService.getBalanceFromAccountById(accountId);
