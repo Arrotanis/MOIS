@@ -34,6 +34,7 @@ public class ProfileController {
 
         // Perform the redirection
         response.sendRedirect(redirectUrl);
+
     }
     @GetMapping("/me")
     public Map<String, Object> getUserProfile(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
