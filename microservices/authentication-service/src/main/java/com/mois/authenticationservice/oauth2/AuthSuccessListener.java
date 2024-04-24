@@ -16,7 +16,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @Component
 public class AuthSuccessListener {
     private final ProfileService profileService;
-
+    private final Logger logger = LoggerFactory.getLogger(AuthSuccessListener.class);
     @Autowired
     public AuthSuccessListener(ProfileService profileService) {
         this.profileService = profileService;
@@ -30,9 +30,21 @@ public class AuthSuccessListener {
             String name = user.getAttribute("name");
             String email = user.getAttribute("email");
             String fbId = user.getAttribute("id");
-            Profile profile = new Profile(112121L, name, email, fbId);
-            profileService.saveProfile(profile);
 
-
+            // Check if a user with the same name already exists
+            Profile existingProfile = profileService.getProfileByName(name);
+            if (existingProfile != null) {
+                // Print existing profile details
+                logger.info("Existing Profile:");
+                logger.info("ID: " + existingProfile.getId());
+                logger.info("Name: " + existingProfile.getName());
+                logger.info("Email: " + existingProfile.getEmail());
+                profileService.saveProfile(existingProfile);
+            } else {
+                // User with the same name doesn't exist, create a new profile
+                Profile profile = new Profile(112121L, name, email, fbId);
+                profileService.saveProfile(profile);
+            }
+        }
     }
-    } }
+}
