@@ -76,8 +76,6 @@ public class TransactionService {
 
     @Transactional
     public void addBalance(AddBalanceDto addBalanceDto) {
-        System.out.println("Davan add lanace na ucet !!!");
-        System.out.println("Na acc: "+ addBalanceDto.getTargetAccountId()+", tolik balance:"+addBalanceDto.getAddBalanceAmount());
         Optional<Account> optionalAccount = accountRepository.findById(addBalanceDto.getTargetAccountId());
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();
@@ -95,7 +93,6 @@ public class TransactionService {
 
             transactionRepository.save(transaction);
             accountRepository.save(account);
-            System.out.println("addBalance guchi");
         } else {
             throw new EntityNotFoundException("Account not found with ID: " + addBalanceDto.getTargetAccountId());
         }
@@ -103,8 +100,6 @@ public class TransactionService {
 
     @Transactional
     public void addBalanceFromDeposit(AddBalanceDto addBalanceDto) {
-        System.out.println("Davan add lanace na ucet !!!");
-        System.out.println("Na acc: "+ addBalanceDto.getTargetAccountId()+", tolik balance:"+addBalanceDto.getAddBalanceAmount());
         Optional<Account> optionalAccount = accountRepository.findById(addBalanceDto.getTargetAccountId());
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();
@@ -122,7 +117,6 @@ public class TransactionService {
 
             transactionRepository.save(transaction);
             accountRepository.save(account);
-            System.out.println("addBalance guchi");
         } else {
             throw new EntityNotFoundException("Account not found with ID: " + addBalanceDto.getTargetAccountId());
         }
@@ -146,20 +140,10 @@ public class TransactionService {
 
             accountRepository.save(account);
             transactionRepository.save(transaction);
-
-            System.out.println("transferToDeposit guchi");
         }
     }
     public List<Account> getAccountsByOwnerProfileId(Long ownerProfileId) {
-        List<Account> akounty;
-        akounty = accountRepository.findByOwnerProfileId(ownerProfileId);
-        int kolik = akounty.size();
-        System.out.println("Pocet elementu v listu je : "+kolik);
-        for (Account element: akounty) {
-            System.out.println("Id accountu: "+element.getId());
-            System.out.println("Balance accountu: "+element.getBalance());
-        }
-        //return akounty;
+
         return accountRepository.findByOwnerProfileId(ownerProfileId);
     }
 
@@ -175,5 +159,4 @@ public class TransactionService {
 
         return currentAccountBalance;
     }
-    //getTransactionHistory
 }
