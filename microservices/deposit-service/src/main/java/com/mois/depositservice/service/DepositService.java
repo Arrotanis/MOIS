@@ -28,17 +28,20 @@ public class DepositService {
 
     private final WebClient.Builder webClientBuilder;
 
-    //nejaky schedule manager
+
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public void createDeposit(CreateDepositDto createDepositDto) {
         System.out.println("Balance: "+createDepositDto.getDepositedBalance()+", owner profile id: "+createDepositDto.getOwnerProfileId()+", linked account id:"+createDepositDto.getLinkedAccountId()+", Datum:"+createDepositDto.getEndDateTime());
-
+        int currentAccountBalance = getAccountBalance(createDepositDto.getLinkedAccountId()).block();
+        System.out.println("Dostal jsem balance z transaction service: "+currentAccountBalance);
+        if (currentAccountBalance < createDepositDto.getDepositedBalance()) {
+            throw new RuntimeException("Insufficient funds in the account.");
+        }
         LocalDateTime now = LocalDateTime.now().plusMinutes(1);
         int hour = now.getHour();
         int minutes = now.getMinute();
         int seconds = now.getSecond();
-        //String date = "2024-04-24";
         String date = createDepositDto.getEndDateTime();
         String formatedHour = String.format("%02d", hour);
         String formatedMinutes = String.format("%02d", minutes);
@@ -49,7 +52,7 @@ public class DepositService {
         Deposit deposit = new Deposit();
         deposit.setLinkedAccountId(createDepositDto.getLinkedAccountId());
 
-        //((( 0.1 / 365) x početSekund) + 1 ) x balance
+
         long countSeconds = Duration.between(LocalDateTime.now(),customDate).toSeconds();
         float calculateInterest = (float)((((0.1/365)*countSeconds)+1));
         System.out.println("Interest je: "+calculateInterest+", napocitany sekundy: "+countSeconds);
@@ -60,6 +63,7 @@ public class DepositService {
         deposit.setEndDate(customDate);
         //deposit.setEndDate(LocalDateTime.now().plusMinutes(1));
         depositRepository.save(deposit);
+
 
         TransferToDepositDto transferToDepositDto = new TransferToDepositDto();
         transferToDepositDto.setAccountId(createDepositDto.getLinkedAccountId());
@@ -89,7 +93,7 @@ public class DepositService {
             // Handle errors asynchronously
             System.err.println("Error occurred: " + error.getMessage());
         });
-        System.out.println("createDeposit guchi");
+
     }
 
     public void executeAtDateTime(Runnable task, LocalDateTime executionTime) {
@@ -138,5 +142,15 @@ public class DepositService {
         return depositRepository.findDepositByLinkedAccountId(linkedAccountId);
     }
 
-    //returnDeposit
+    public Mono<Integer> getAccountBalance(Long accountId){
+
+        return webClientBuilder.build().get()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("http")
+                        .host("transaction-service")
+                        .path("api/transaction/get-balance/" + accountId)
+                        .build())
+                .retrieve()
+                .bodyToMono(Integer.class);
+    }
 }

@@ -75,4 +75,9 @@ public class TransactionController {
         return transactionService.getTransactionHistory(accountId);
     }
 
+    @GetMapping("/get-balance/{accountId}")
+    public int getBalanceFromAccount(@PathVariable Long accountId){
+        return transactionService.getBalanceFromAccountById(accountId);
+    }
+
 }

@@ -168,5 +168,12 @@ public class TransactionService {
         Account tempAccount = optionalAccount.get();
         return transactionRepository.findBySourceAccount(tempAccount);
     }
+
+    public int getBalanceFromAccountById(Long accountId){
+        Optional<Account> account = accountRepository.findById(accountId);
+        int currentAccountBalance = account.get().getBalance();
+
+        return currentAccountBalance;
+    }
     //getTransactionHistory
 }

@@ -32,11 +32,11 @@ public class DepositController {
         return depositService.getAllLinkedAccountDeposits(linkedAccountId);
     }
 
-    @GetMapping("/localdatetest")
-    public String localDateTime(){
-        int day = 30;
-        int month = 11;
-        int year = 1945;
+    @GetMapping("/get-balance/test/{accountId}")
+    public int localDateTime(@PathVariable Long accountId){
+
+
+
         LocalDateTime now = LocalDateTime.now().plusMinutes(5).plusHours(2);
         int hour = now.getHour();
         int minutes = now.getMinute();
@@ -48,6 +48,9 @@ public class DepositController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         LocalDateTime customDate = LocalDateTime.parse(date+"T"+formatedHour+":"+formatedMinutes+":"+formatedSeconds, formatter);
         //LocalDateTime customDate = LocalDateTime.of(year,month,day,hour,minutes);
-        return customDate.toString()+"asd"+formatedHour+formatedMinutes+formatedSeconds;
+        //return customDate.toString()+"asd"+formatedHour+formatedMinutes+formatedSeconds;
+        int currentBalance = 0;
+        //currentBalance = depositService.deleteMeLater(accountId).block();
+        return currentBalance;
     }
 }
