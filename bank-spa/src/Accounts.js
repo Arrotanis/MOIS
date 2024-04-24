@@ -28,20 +28,46 @@ const Accounts = ({loggedIn, onLogin}) => {
     const [selectedAccountId, setSelectedAccountId] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [termDate, setTermDate] = useState(dayjs(date).add(6, 'month'))
+    const [description, setDescription] = useState(null);
+    const [targetAccount, setTargetAccount] = useState(false);
 
     const sendLoginRequest = () => {
         setLoading(true);
         axios.get('http://localhost:8080/api/transaction/accounts/' + accountId)
             .then(response => {
                 setAccountData(response.data);
-                setLoading(false);
                 onLogin();
+                setLoading(false);
             })
             .catch(error => {
                 console.error('Error retrieving account data:', error);
                 setLoading(false);
+                alert("Error");
             });
     };
+
+    const handleCreateTransaction = () => {
+        setLoading(true);
+        axios.post('http://localhost:8080/api/transaction/create-transaction', {
+            description: description,
+            transactionAmount: balanceAmounts[selectedAccountId?.id],
+            sourceAccount: selectedAccountId?.id,
+            targetAccount: targetAccount
+        })
+            .then(response => {
+                console.log('Transaction created successfully:', response.data);
+                sendLoginRequest();
+                const message = response.data;
+                alert(message);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error('Error creating transaction:', error);
+                setLoading(false);
+                alert("Error creating transaction");
+            });
+    };
+
 
     const handleAccountClick = (account) => {
         setSelectedAccountId(account);
@@ -60,12 +86,16 @@ const Accounts = ({loggedIn, onLogin}) => {
         })
             .then(response => {
                 console.log('Balance added successfully:', response.data);
-                setLoading(false);
                 sendLoginRequest();
+                handleCloseDialog();
+                const message = response.data;
+                alert(message);
+                setLoading(false);
             })
             .catch(error => {
                 console.error('Error adding balance:', error);
                 setLoading(false);
+                alert("Error adding balance");
             });
     };
 
@@ -80,9 +110,15 @@ const Accounts = ({loggedIn, onLogin}) => {
         })
             .then(response => {
                 console.log('Deposit created successfully:', response.data);
+                sendLoginRequest();
+                handleCloseDialog();
+                const message = response.data;
+                alert(message);
+                setLoading(false);
             })
             .catch(error => {
                 console.error('Error creating deposit:', error);
+                alert('Error creating deposit');
             });
     };
 
@@ -101,9 +137,13 @@ const Accounts = ({loggedIn, onLogin}) => {
             .then(response => {
                 console.log('Account created successfully:', response.data);
                 sendLoginRequest();
+                const message = response.data;
+                alert(message);
+                setLoading(false);
             })
             .catch(error => {
                 console.error('Error creating account:', error);
+                alert('Failed to create account');
             });
     };
 
@@ -152,6 +192,9 @@ const Accounts = ({loggedIn, onLogin}) => {
                     <Dialog open={openDialog} onClose={handleCloseDialog}>
                         <DialogTitle>Account details</DialogTitle>
                         <DialogContent>
+                            <Typography variant="subtitle1">
+                                Balance: {selectedAccountId && selectedAccountId.balance}
+                            </Typography>
                             <div style={{height: '1rem'}}/>
                             <div style={{display: 'flex', alignItems: 'center', marginBottom: '1rem'}}>
                                 <TextField
@@ -176,6 +219,28 @@ const Accounts = ({loggedIn, onLogin}) => {
                                 <Button onClick={handleAddTerm} color="primary" variant="contained"
                                         sx={{marginLeft: '1rem'}}>Add term deposit</Button>
                             </div>
+
+                            <div style={{display: 'flex', alignItems: 'center', marginBottom: '1rem'}}>
+                                <TextField
+                                    type="number"
+                                    label="Target Account"
+                                    value={targetAccount}
+                                    onChange={(e) => setTargetAccount(e.target.value)}
+                                    variant="outlined"
+                                    sx={{flex: 1, marginRight: '1rem'}}
+                                />
+                                <TextField
+                                    type="text"
+                                    label="Description"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    variant="outlined"
+                                    sx={{flex: 1, marginRight: '1rem'}}
+                                />
+                            </div>
+                            <Button onClick={handleCreateTransaction} color="primary" variant="contained">Send Money</Button>
+
+
                             <Typography variant="subtitle1">Transaction History:</Typography>
                             <List>
                                 {selectedAccountId?.sourceTransactions.map(transaction => (
@@ -184,7 +249,10 @@ const Accounts = ({loggedIn, onLogin}) => {
                                         display: 'flex',
                                         gap: '10px'
                                     }}>
-                                        <ListItemText primary={`To account: ${transaction.targetAccount}`}/>
+                                        {transaction.targetAccount
+                                            ? <ListItemText primary={`To account: ${transaction.targetAccount}`}/>
+                                            : <ListItemText primary="Term deposit"/>
+                                        }
                                         <ListItemText primary={`Amount: ${transaction.transactionAmount}`}/>
                                         <ListItemText primary={`Description: ${transaction.description}`}/>
                                     </ListItem>
@@ -211,7 +279,6 @@ const Accounts = ({loggedIn, onLogin}) => {
                     </Dialog>
                 </div>
             )}
-
             {!loading && !accountData && !loggedIn && <p></p>}
         </div>
     );
