@@ -62,6 +62,7 @@ const Accounts = ({loggedIn, onLogin}) => {
                 console.log('Balance added successfully:', response.data);
                 setLoading(false);
                 sendLoginRequest();
+                handleCloseDialog(); // Zavřít dialogové okno
             })
             .catch(error => {
                 console.error('Error adding balance:', error);
@@ -80,6 +81,7 @@ const Accounts = ({loggedIn, onLogin}) => {
         })
             .then(response => {
                 console.log('Deposit created successfully:', response.data);
+                handleCloseDialog(); // Zavřít dialogové okno
             })
             .catch(error => {
                 console.error('Error creating deposit:', error);
@@ -152,6 +154,9 @@ const Accounts = ({loggedIn, onLogin}) => {
                     <Dialog open={openDialog} onClose={handleCloseDialog}>
                         <DialogTitle>Account details</DialogTitle>
                         <DialogContent>
+                            <Typography variant="subtitle1">
+                                Balance: {selectedAccountId && selectedAccountId.balance}
+                            </Typography>
                             <div style={{height: '1rem'}}/>
                             <div style={{display: 'flex', alignItems: 'center', marginBottom: '1rem'}}>
                                 <TextField
@@ -184,7 +189,10 @@ const Accounts = ({loggedIn, onLogin}) => {
                                         display: 'flex',
                                         gap: '10px'
                                     }}>
-                                        <ListItemText primary={`To account: ${transaction.targetAccount}`}/>
+                                        {transaction.targetAccount
+                                            ? <ListItemText primary={`To account: ${transaction.targetAccount}`}/>
+                                            : <ListItemText primary="Term deposit"/>
+                                        }
                                         <ListItemText primary={`Amount: ${transaction.transactionAmount}`}/>
                                         <ListItemText primary={`Description: ${transaction.description}`}/>
                                     </ListItem>
@@ -211,7 +219,6 @@ const Accounts = ({loggedIn, onLogin}) => {
                     </Dialog>
                 </div>
             )}
-
             {!loading && !accountData && !loggedIn && <p></p>}
         </div>
     );
