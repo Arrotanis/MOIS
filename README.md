@@ -27,23 +27,15 @@ v CMD přejít do složky ...\MOIS\bank-spa -> npm start
 
 TODO:
 
-přepsat request param metody na request body (potřeba upravit controller, service a vytvořit dto)
+front-end (transakce, zobrazení vkladů, zobratit jméno uživatele)
 
-dokončit základní funkcionality služeb (metody v controllerech atd.)
+možnost upravovat vklady (ukončit je předčasně, prodlužovat)
 
-propojit služby mezi sebou (pomocí webClientBuilder, příklad v DepositService)
+do transakcí přidat datum
 
-vytvořit basic front-end
+integrovat sandbox paypal do transaction-service  a tím přidávat peníze na účet
 
-implementovat pokročilé funkcionality
-
-propojit transaction-service s paypalem (add balance)
-
-propojit authentication-service s facebookem
-
-rozdělení databází pro každou službu (možná ani není potřeba)
-
-dockerizace služeb (mělo by být easy)
+rozdělení databází pro každou službu (udělat až konci aby při vývoji nemuseli běžet 3 databáze, všechno by mělo fungovat, jen je potřeba v applicaton.properties nakonfigurovat jednotlivé db)
 
 ----------------------
 
@@ -51,6 +43,10 @@ Lukášův projekt na PPRO: https://github.com/vanalu1/PPRO_InternetBanking
 
 Eureka Dashboard: http://localhost:8080/eureka/web | http://localhost:8761/
 
-Random YT guide: https://www.youtube.com/playlist?list=PLSVW22jAG8pBnhAdq9S8BpLnZ0_jVBj0c
-
 Front-end: http://localhost:3000/
+
+První prezentace: https://docs.google.com/presentation/d/1iMDNH_QD0DeWmXjKKjU5DXnwKESFE4K4JbfvWbJssZ8/edit?usp=sharing
+
+Druhá prezentace: https://docs.google.com/presentation/d/1Gxyp5Mf9zhPDemknGq6QQtOhiFY06eZd0SSvuRwN_jw/edit?usp=sharing
+
+Postman: https://www.postman.com/moisbank/workspace/mois/overview
