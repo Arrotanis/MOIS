@@ -34,12 +34,11 @@ const Accounts = ({loggedIn, onLogin}) => {
     const [targetAccount, setTargetAccount] = useState(false);
 
     useEffect(() => {
-        console.log("ID:", ID); // Print the ID
-        setAccountId(ID);// Set the accountId using the ID from the route parameter
-        sendLoginRequest(); // Fetch account data when the component mounts or when the ID changes
-    }, [ID]); // Add ID to the dependency array
+        console.log("ID:", ID);
+        setAccountId(ID);
+        sendLoginRequest();
+    }, [ID]);
     useEffect(() => {
-        // Fetch account data whenever accountId changes
         if (accountId) {
             sendLoginRequest();
         }
@@ -105,6 +104,8 @@ const Accounts = ({loggedIn, onLogin}) => {
             })
             .catch(error => {
                 console.error('Error creating deposit:', error);
+                setLoading(false);
+                alert("Error creating term deposit");
             });
     };
 
