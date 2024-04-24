@@ -39,7 +39,6 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.OK)
     @Transactional
     public String addBalanceToAccount(@RequestBody AddBalanceDto addBalanceDto) {
-        System.out.println("Z controleru acc id: "+addBalanceDto.getTargetAccountId());
         transactionService.addBalance(addBalanceDto);
         return "Balance added to account successfully";
     }
@@ -47,7 +46,6 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.OK)
     @Transactional
     public String addBalanceToAccountFromDeposit(@RequestBody AddBalanceDto addBalanceDto) {
-        System.out.println("Z controleru acc id: "+addBalanceDto.getTargetAccountId());
         transactionService.addBalanceFromDeposit(addBalanceDto);
         return "Balance added to account successfully";
     }

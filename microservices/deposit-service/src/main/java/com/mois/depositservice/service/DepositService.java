@@ -36,7 +36,7 @@ public class DepositService {
         int currentAccountBalance = getAccountBalance(createDepositDto.getLinkedAccountId()).block();
 
         if (currentAccountBalance < createDepositDto.getDepositedBalance() || createDepositDto.getDepositedBalance() < 0) {
-            throw new RuntimeException("Insufficient funds in the account.");
+            throw new RuntimeException("Insufficient funds in the account or deposit amount is negative number.");
         }
         LocalDateTime now = LocalDateTime.now().plusMinutes(1);
         int hour = now.getHour();
@@ -55,13 +55,12 @@ public class DepositService {
 
         long countSeconds = Duration.between(LocalDateTime.now(),customDate).toSeconds();
         float calculateInterest = (float)((((0.1/365)*countSeconds)+1));
-        System.out.println("Interest je: "+calculateInterest+", napocitany sekundy: "+countSeconds);
         deposit.setInterestRate(calculateInterest);
         deposit.setOwnerProfileId(createDepositDto.getOwnerProfileId());
         deposit.setDepositedBalance(createDepositDto.getDepositedBalance());
         deposit.setStartDate(LocalDateTime.now());
         deposit.setEndDate(customDate);
-        //deposit.setEndDate(LocalDateTime.now().plusMinutes(1));
+
         depositRepository.save(deposit);
 
 
@@ -70,8 +69,7 @@ public class DepositService {
         transferToDepositDto.setAmountToTransfer(createDepositDto.getDepositedBalance());
 
         float totalSum = createDepositDto.getDepositedBalance() * deposit.getInterestRate();
-        // Schedule the method execution
-        //executeAtDateTime(this::myScheduledMethod, deposit.getEndDate());
+
         executeAtDateTime(() -> myScheduledMethod(createDepositDto.getLinkedAccountId(), createDepositDto.getDepositedBalance(), totalSum), deposit.getEndDate());
 
         Mono<String> responseMono = webClientBuilder.build().post()
@@ -134,8 +132,6 @@ public class DepositService {
             // Handle errors asynchronously
             System.err.println("Error occurred: " + error.getMessage());
         });
-
-        System.out.println("myScheduledMethod guchi");
     }
 
     public List<Deposit> getAllLinkedAccountDeposits(Long linkedAccountId){
