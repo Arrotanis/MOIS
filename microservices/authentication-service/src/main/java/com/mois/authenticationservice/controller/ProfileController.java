@@ -24,9 +24,16 @@ public class ProfileController {
         this.profileService = profileService;
     }
     @GetMapping("/")
-    public void redirectToLocalhost(HttpServletResponse response) throws IOException {
+    public void redirectToLocalhost(HttpServletResponse response, OAuth2AuthenticationToken oAuth2AuthenticationToken) throws IOException {
+        Map<String, Object> attributes = oAuth2AuthenticationToken.getPrincipal().getAttributes();
+        String name = (String) attributes.get("name");
+        Profile profile = profileService.getProfileByName(name);
+
+        // Construct the redirection URL
+        String redirectUrl = String.format("http://localhost:3000/%s", profile.getId());
+
         // Perform the redirection
-        response.sendRedirect("http://localhost:3000");
+        response.sendRedirect(redirectUrl);
     }
     @GetMapping("/me")
     public Map<String, Object> getUserProfile(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
