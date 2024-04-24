@@ -26,7 +26,7 @@ const Accounts = ({loggedIn, onLogin}) => {
     const [balanceAmounts, setBalanceAmounts] = useState({});
     const [selectedAccountId, setSelectedAccountId] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
-    const [termDate, setTermDate] = React.useState(dayjs(date))
+    const [termDate, setTermDate] = useState(dayjs(date).add(6, 'month'))
 
     const sendLoginRequest = () => {
         setLoading(true);
@@ -117,35 +117,43 @@ const Accounts = ({loggedIn, onLogin}) => {
             )}
             {loggedIn && accountData && (
                 <div>
-                    <Typography variant="h6">Accounts</Typography>
+                    <Typography variant="h5">Accounts</Typography>
+                    <Typography variant="h6">
+                        Total balance: {accountData.reduce((total, account) => total + account.balance, 0)}
+                    </Typography>
                     <List>
                         {accountData.map(account => (
                             <ListItem key={account.id} button onClick={() => handleAccountClick(account)}>
-                                <ListItemText primary={`Account number: ${account.id}`}/>
-                                <ListItemText primary={`Balance: ${account.balance}`}/>
+                                <ListItemText primary={`Account number: ${account.id}`} />
+                                <ListItemText primary={`Balance: ${account.balance}`} />
                             </ListItem>
                         ))}
                     </List>
                     <Dialog open={openDialog} onClose={handleCloseDialog}>
-                        <DialogTitle>Account Details</DialogTitle>
+                        <DialogTitle>Account details</DialogTitle>
                         <DialogContent>
-                            <Typography variant="subtitle1">Account number: {selectedAccountId?.id}</Typography>
-                            <Typography variant="subtitle1">Balance: {selectedAccountId?.balance}</Typography>
-                            <TextField
-                                type="number"
-                                label="Amount"
-                                value={balanceAmounts[selectedAccountId?.id] || ''}
-                                onChange={(e) => handleBalanceChange(selectedAccountId?.id, e.target.value)}
-                                fullWidth
-                                variant="outlined"
-                                sx={{marginBottom: '1rem'}}
-                            />
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                    value={termDate}
-                                    onChange={(newValue) => setTermDate(newValue)}
+                            <div style={{ height: '1rem' }} />
+                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                                <TextField
+                                    type="number"
+                                    label="Amount"
+                                    value={balanceAmounts[selectedAccountId?.id] || ''}
+                                    onChange={(e) => handleBalanceChange(selectedAccountId?.id, e.target.value)}
+                                    variant="outlined"
+                                    sx={{ flex: 1, marginRight: '1rem' }}
                                 />
-                            </LocalizationProvider>
+                                <Button onClick={handleAddBalance} color="primary" variant="contained">Add balance</Button>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                        value={termDate}
+                                        onChange={(newValue) => setTermDate(newValue)}
+                                        minDate={dayjs().add(6, 'month')}
+                                    />
+                                </LocalizationProvider>
+                                <Button onClick={handleAddTerm} color="primary" variant="contained" sx={{ marginLeft: '1rem' }}>Add term deposit</Button>
+                            </div>
                             <Typography variant="subtitle1">Transaction History:</Typography>
                             <List>
                                 {selectedAccountId?.sourceTransactions.map(transaction => (
@@ -176,8 +184,6 @@ const Accounts = ({loggedIn, onLogin}) => {
                             </List>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleAddTerm} color="primary">Add term deposit</Button>
-                            <Button onClick={handleAddBalance} color="primary">Add balance</Button>
                             <Button onClick={handleCloseDialog} color="primary">Close</Button>
                         </DialogActions>
                     </Dialog>
