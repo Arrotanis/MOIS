@@ -36,7 +36,12 @@ const Accounts = ({loggedIn, onLogin}) => {
         setAccountId(ID);// Set the accountId using the ID from the route parameter
         sendLoginRequest(); // Fetch account data when the component mounts or when the ID changes
     }, [ID]); // Add ID to the dependency array
-
+    useEffect(() => {
+        // Fetch account data whenever accountId changes
+        if (accountId) {
+            sendLoginRequest();
+        }
+    }, [accountId]);
     const sendLoginRequest = () => {
         setLoading(true);
         axios.get('http://localhost:8080/api/transaction/accounts/' + accountId)
@@ -117,27 +122,6 @@ const Accounts = ({loggedIn, onLogin}) => {
 
     return (
         <div>
-            {!loggedIn && (
-                <>
-                    <TextField
-                        id="account"
-                        label="Login (ID)"
-                        value={accountId}
-                        onChange={(e) => setAccountId(e.target.value)}
-                        fullWidth
-                        variant="outlined"
-                    />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={sendLoginRequest}
-                        disabled={loading}
-                        sx={{marginTop: '1rem'}}
-                    >
-                        {loading ? <CircularProgress size={24}/> : 'Login'}
-                    </Button>
-                </>
-            )}
             {loggedIn && accountData && (
                 <div>
                     <Typography variant="h5">Accounts</Typography>
